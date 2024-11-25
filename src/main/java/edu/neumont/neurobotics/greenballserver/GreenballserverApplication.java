@@ -12,8 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GreenballserverApplication {
 
 	public static void main(String[] args) {
-		JDA api = JDABuilder.createDefault(SecurityInfo.BOT_TOKEN).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
-		api.addEventListener(new CommandListener());
 		SpringApplication.run(GreenballserverApplication.class, args);
 	}
 

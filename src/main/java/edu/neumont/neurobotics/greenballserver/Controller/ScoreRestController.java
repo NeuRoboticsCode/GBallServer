@@ -7,6 +7,9 @@
 package edu.neumont.neurobotics.greenballserver.Controller;
 
 import edu.neumont.neurobotics.greenballserver.Model.ScoreSave;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,10 @@ import java.util.Optional;
 @EnableJpaRepositories
 @RequestMapping("/gballserver")
 public class ScoreRestController {
+    JDA api = JDABuilder.createDefault(SecurityInfo.BOT_TOKEN)
+            .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+            .addEventListeners(new CommandListener())
+            .build();
 
     @Autowired
     ScoreRepository scoreRepository;
@@ -33,6 +40,7 @@ public class ScoreRestController {
             score = save.getScore() + 1;
         }
         scoreRepository.save(new ScoreSave(1,score,new Date()));
+        CommandListener.sendUpdate("Score update " + score, api.getTextChannelById(1310687222625992707l));
     }
 
     @RequestMapping(path = "/score",method = RequestMethod.GET)
